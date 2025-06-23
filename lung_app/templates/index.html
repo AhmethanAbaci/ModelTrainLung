@@ -1,219 +1,234 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zatüre Kontrolü - Sağlık Merkezi</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zatüre Kontrolü - Sağlık Merkezi</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+  body {
+    margin: 0; font-family: 'Roboto Mono', monospace;
+    background: #0a0f14; color: #cbd5e1; min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header {
+    background: #16222a; color: #a3cef1; padding: 1.5rem 0;
+    text-align: center; font-weight: 700; font-size: 2rem;
+    letter-spacing: 2px; box-shadow: 0 3px 10px rgba(0,0,0,0.9);
+    user-select: none; text-shadow: 0 0 10px #4dd0e1;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    padding: 3rem 1rem;
+    gap: 2rem;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 450px;
+    flex-wrap: nowrap;
+  }
+  /* Üç sütun */
+  .panel {
+    background: #1f2937;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 30px rgba(77, 208, 225, 0.2);
+    border: 1px solid #4dd0e1;
+    color: #cbd5e1;
+    font-family: monospace;
+  }
+  .upload-panel {
+    flex: 0 0 320px;
+  }
+  .preview-panel {
+    flex: 0 0 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .result-panel {
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+  }
 
-    body {
-      margin: 0;
-      font-family: 'Roboto Mono', monospace;
-      background: #0a0f14; /* koyu, nötr siyah-mavi-siyah arası */
-      color: #cbd5e1; /* açık gri/mavi tonları */
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      background: #16222a; /* koyu gri-mavi karışımı */
-      color: #a3cef1; /* yumuşak buz mavisi */
-      padding: 1.5rem 0;
-      text-align: center;
-      font-weight: 700;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.9);
-      user-select: none;
-      text-shadow: 0 0 10px #4dd0e1;
-    }
+  form label {
+    font-weight: 600; font-size: 1.2rem; color: #7dd3fc;
+    display: block; margin-bottom: 1rem; user-select: none;
+  }
+  input[type="file"] {
+    padding: 0.4rem; cursor: pointer;
+    background: #111827; border: 1px solid #4dd0e1;
+    border-radius: 0.5rem; color: #cbd5e1;
+    font-family: monospace;
+  }
+  input[type="file"]:hover {
+    border-color: #22d3ee; background: #1e293b;
+  }
+  button[type="submit"] {
+    margin-top: 1.8rem; background: #22d3ee;
+    border: none; padding: 0.8rem 3.5rem; font-size: 1.1rem;
+    font-weight: 700; border-radius: 0.8rem; color: #0f172a;
+    cursor: pointer; box-shadow: 0 6px 20px rgba(34, 211, 238, 0.6);
+    font-family: monospace;
+  }
+  button[type="submit"]:hover {
+    background: #06b6d4; box-shadow: 0 10px 30px rgba(6, 182, 212, 0.8);
+  }
+  #preview {
+    max-width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    transition: opacity 0.4s ease;
+  }
+  .image-filename {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    color: #a0aec0;
+    user-select: text;
+  }
+  .result-box {
+    font-size: 1.3rem; font-weight: 700;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 1rem; border-radius: 1rem;
+    box-shadow: inset 0 0 15px rgba(34, 211, 238, 0.5);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  /* Analiz geçmişi listesi */
+  .history-list {
+    overflow-y: auto;
+    max-height: 320px;
+    border-top: 1px solid #4dd0e1;
+    padding-top: 1rem;
+  }
+  .history-list ul {
+    padding-left: 0; list-style: none; margin: 0;
+  }
+  .history-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.3rem 0; border-bottom: 1px solid #4dd0e1;
+    font-size: 0.9rem;
+  }
+  .history-list li:last-child {
+    border-bottom: none;
+  }
+  .badge-success {
+    background-color: #22c55e;
+  }
+  .badge-danger {
+    background-color: #ef4444;
+  }
+
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.95rem;
+    color: #64748b;
+    background: #0f172a;
+    user-select: none;
+    letter-spacing: 0.8px;
+    box-shadow: inset 0 1px 4px rgba(255,255,255,0.05);
+    font-family: monospace;
+  }
+
+  /* Responsive: sütunlar alt alta geçsin */
+  @media (max-width: 1024px) {
     main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 3rem;
-      padding: 3rem 1rem;
-      flex-wrap: wrap;
-    }
-    .card {
-      max-width: 480px;
-      width: 100%;
-      background: #1f2937; /* koyu gri - soft siyah arası */
-      border-radius: 1rem;
-      padding: 2.5rem 3rem;
-      box-shadow: 0 8px 30px rgba(77, 208, 225, 0.2); /* soft cyan gölge */
-      transition: transform 0.3s ease;
-      border: 1px solid #4dd0e1; /* buz mavisi border */
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(77, 208, 225, 0.5);
-    }
-    form label {
-      font-weight: 600;
-      font-size: 1.2rem;
-      color: #7dd3fc; /* açık buz mavisi */
-      display: block;
-      margin-bottom: 1rem;
-      user-select: none;
-    }
-    input[type="file"] {
-      padding: 0.4rem;
-      cursor: pointer;
-      background: #111827;
-      border: 1px solid #4dd0e1;
-      border-radius: 0.5rem;
-      color: #cbd5e1;
-      transition: border-color 0.3s ease, background-color 0.3s ease;
-      font-family: monospace;
-    }
-    input[type="file"]:hover {
-      border-color: #22d3ee;
-      background: #1e293b;
-    }
-    button[type="submit"] {
-      margin-top: 1.8rem;
-      background: #22d3ee; /* cyan/turkuaz */
-      border: none;
-      padding: 0.8rem 3.5rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border-radius: 0.8rem;
-      color: #0f172a;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(34, 211, 238, 0.6);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      font-family: monospace;
-    }
-    button[type="submit"]:hover {
-      background: #06b6d4;
-      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.8);
-    }
-    .result {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-top: 2rem;
-      color: #22d3ee;
-      text-align: center;
-      user-select: text;
-      background: rgba(15, 23, 42, 0.7);
-      padding: 1rem 1.5rem;
-      border-radius: 1rem;
-      box-shadow: inset 0 0 15px rgba(34, 211, 238, 0.5);
-      font-family: monospace;
-    }
-    .preview-container {
-      max-width: 480px;
-      width: 100%;
-      background: #1f2937;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      box-shadow: 0 8px 30px rgba(77, 208, 225, 0.2);
-      display: flex;
       flex-direction: column;
       align-items: center;
-      user-select: none;
-      border: 1px solid #4dd0e1;
+      gap: 2rem;
     }
-    .preview-container h5 {
-      margin-bottom: 1rem;
-      font-weight: 700;
-      color: #7dd3fc;
-      letter-spacing: 0.5px;
-      font-family: monospace;
+    .upload-panel, .preview-panel, .result-panel {
+      flex: 1 1 90vw;
+      max-width: 90vw;
     }
-    #preview {
-      max-width: 100%;
-      border-radius: 1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-      display: none;
-      transition: opacity 0.4s ease;
+    .history-list {
+      max-height: none;
     }
-    footer {
-      text-align: center;
-      padding: 1rem 0;
-      font-size: 0.95rem;
-      color: #64748b;
-      background: #0f172a;
-      user-select: none;
-      letter-spacing: 0.8px;
-      box-shadow: inset 0 1px 4px rgba(255,255,255,0.05);
-      font-family: monospace;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      main {
-        flex-direction: column;
-        align-items: center;
-      }
-      .card, .preview-container {
-        max-width: 90vw;
-        margin-bottom: 2rem;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header>🩺 Zatüre Kontrolü - Sağlık Merkezi</header>
+<header>🩺 Zatüre Kontrolü - Sağlık Merkezi</header>
 
-  <main>
-    <!-- Form Solda -->
-    <div class="card shadow-sm">
-      <form method="POST" enctype="multipart/form-data" class="text-center" id="uploadForm">
-        <label for="imageInput">Zatüre Tespiti İçin Akciğer Görüntüsü Yükleyin</label>
-        <input type="file" class="form-control" id="imageInput" name="image" accept="image/png, image/jpeg" required />
-        <button type="submit">Kontrol Et</button>
-      </form>
+<main>
+  <div class="panel upload-panel">
+    <form method="POST" enctype="multipart/form-data" id="uploadForm" class="text-center">
+      <label for="imageInput">Zatüre Tespiti İçin Akciğer Görüntüsü Yükleyin</label>
+      <input type="file" class="form-control" id="imageInput" name="image" accept="image/png, image/jpeg" required />
+      <button type="submit">Kontrol Et</button>
+    </form>
+  </div>
 
-      {% if result %}
-<div class="result" role="alert">
-  Sonuç: <strong>{{ result }}</strong>
-  {% if percent is not none %}
-    ({{ percent }})
-  {% endif %}
-</div>
-{% endif %}
+  <div class="panel preview-panel">
+    <h5>Yüklenen Görüntü</h5>
+    {% if image_url %}
+      <img src="{{ url_for('static', filename=image_url) }}" alt="Yüklenen Görüntü" id="preview" style="display:block;" />
+      <p class="image-filename">Görüntü adı: <strong>{{ image_url.split('/')[-1] }}</strong></p>
+    {% else %}
+      <img id="preview" alt="Görüntü Önizleme" style="display:none;" />
+    {% endif %}
+  </div>
 
-    </div>
+  <div class="panel result-panel">
+    {% if result %}
+      <div class="result-box">
+        Sonuç: <strong>{{ result }}</strong>
+        {% if percent %}
+          ({{ percent }})
+        {% endif %}
+      </div>
+    {% endif %}
 
-    <!-- Resim Önizleme Sağda -->
-    <div class="preview-container">
-      <h5>Yüklenen Görüntü</h5>
-      <img id="preview" alt="Görüntü Önizleme" />
-    </div>
-  </main>
+    {% if history %}
+      <div class="history-list">
+        <h5>Analiz Geçmişi</h5>
+        <ul>
+          {% for item in history|reverse %}
+          <li>
+            <span>{{ item.filename }} <br> <small>{{ item.datetime }}</small></span>
+            <span class="badge {% if item.result == 'SAĞLIKLI' %}badge-success{% else %}badge-danger{% endif %}">
+              {{ item.result }} ({{ item.percent }})
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</main>
 
-  <footer>
-    © 2025 Sağlık Merkezi | Tüm Hakları Saklıdır
-  </footer>
+<footer>
+  © 2025 Sağlık Merkezi | Tüm Hakları Saklıdır
+</footer>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const input = document.getElementById('imageInput');
+  const preview = document.getElementById('preview');
+  const form = document.getElementById('uploadForm');
 
-  <!-- Görsel önizleme script -->
-  <script>
-    const input = document.getElementById('imageInput');
-    const preview = document.getElementById('preview');
+  input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.setAttribute('src', e.target.result);
+        preview.style.display = 'block';
+        preview.style.opacity = '1';
+      };
+      reader.readAsDataURL(file);
 
-    input.addEventListener('change', function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          preview.setAttribute('src', e.target.result);
-          preview.style.display = 'block';
-          preview.style.opacity = '1';
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.style.display = 'none';
-        preview.removeAttribute('src');
-      }
-    });
-  </script>
+      setTimeout(() => {
+        form.submit();
+      }, 500);
+    } else {
+      preview.style.display = 'none';
+      preview.removeAttribute('src');
+    }
+  });
+</script>
 </body>
 </html>

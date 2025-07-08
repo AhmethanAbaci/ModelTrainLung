@@ -1,36 +1,51 @@
 import os
 from flask import Flask, render_template, request
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from PIL import Image
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from PIL import Image
-import numpy as np
-
-# Grad-CAM sınıfını içe aktar
-from gradcam_helper import PneumoniaGradCAM
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'static/uploads'
-MARKED_FOLDER = 'static/marked'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(MARKED_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MARKED_FOLDER'] = MARKED_FOLDER
 
-MODEL_PATH = 'models/pnomoni_modeli_son.h5'
+xray_model = load_model('models/xray_classifier.h5')
+disease_model = load_model('models/pnomoni_modeli.h5')
+
 IMG_SIZE = (150, 150)
 
-gradcam = PneumoniaGradCAM(MODEL_PATH, IMG_SIZE)
+history = []
 
-# Basit analiz geçmişi (uygulama açık kaldığı sürece)
-analysis_history = []
+def preprocess(img):
+    img = img.resize(IMG_SIZE)
+    img_array = image.img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
+
+def is_xray(img):
+    x = preprocess(img)
+    pred = xray_model.predict(x)[0][0]
+    return pred > 0.5, pred * 100
+
+def detect_disease(img):
+    x = preprocess(img)
+    pred = disease_model.predict(x)[0][0]
+    percent = pred * 100
+    label = "HASTA" if pred > 0.5 else "SAĞLIKLI"
+    return label, f"{percent:.2f}%"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    global history
+
     result = None
     percent = None
     image_url = None
-    marked_url = None
+    xray_warning = None
 
     if request.method == 'POST':
         file = request.files.get('image')
@@ -39,46 +54,56 @@ def index():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
 
-            # Görüntüyü analiz et
-            analysis = gradcam.analyze_image(file_path, threshold=0.5, show_plot=False)
+            img = Image.open(file_path).convert('RGB')
+            is_xray_img, xray_conf = is_xray(img)
 
-            probability = analysis['probability']
-            label = 'HASTA' if probability > 0.5 else 'SAĞLIKLI'
-            confidence_percent = f"{probability*100:.2f}%" if probability > 0.5 else f"{(1-probability)*100:.2f}%"
-
-            result = label
-            percent = confidence_percent
             image_url = f'uploads/{filename}'
 
-            marked_url = None
-            if 'overlay_image' in analysis:
-                overlay_img = analysis['overlay_image']  # NumPy BGR formatında
-                overlay_rgb = overlay_img[..., ::-1]  # BGR'den RGB'ye dönüştür
-
-                pil_img = Image.fromarray(overlay_rgb)
-                marked_filename = f"marked_{filename}"
-                marked_path = os.path.join(app.config['MARKED_FOLDER'], marked_filename)
-                pil_img.save(marked_path)
-                marked_url = f'marked/{marked_filename}'
-
-            # Geçmişe kaydet
-            analysis_history.append({
-                'filename': filename,
-                'datetime': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'result': label,
-                'percent': confidence_percent,
-                'image_url': image_url,
-                'marked_url': marked_url
-            })
+            if not is_xray_img:
+                xray_warning = f"Bu görüntü bir X-ray değildir! ({xray_conf:.2f}%)"
+                result = "Analiz yapılmadı"
+                percent = "-"
+            else:
+                result, percent = detect_disease(img)
+                xray_warning = f"X-ray doğrulandı. ({xray_conf:.2f}%)"
+                new_entry = {
+                    'filename': filename,
+                    'datetime': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'result': result,
+                    'percent': percent
+                }
+                history.append(new_entry)
 
     return render_template(
         'index.html',
         result=result,
         percent=percent,
         image_url=image_url,
-        marked_url=marked_url,
-        history=analysis_history
+        xray_warning=xray_warning,
+        history=history
     )
+
+@app.route('/history/<int:index>')
+def show_history(index):
+    global history
+    if 0 <= index < len(history):
+        item = history[index]
+        return render_template(
+            'index.html',
+            result=item['result'],
+            percent=item['percent'],
+            image_url=f"uploads/{item['filename']}",
+            xray_warning=None,
+            history=history
+        )
+    return "Geçersiz kayıt", 404
+
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)

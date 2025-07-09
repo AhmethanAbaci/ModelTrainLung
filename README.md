@@ -2,7 +2,7 @@
 
 ## 🇹🇷 Proje Açıklaması
 
-Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneumonia)** hastalığını tespit edebilen bir yapay zekâ modelini içermektedir. **Convolutional Neural Network (CNN)** mimarisi kullanılarak oluşturulan model, görüntü sınıflandırması yaparak **hasta** ve **sağlıklı** ayrımını gerçekleştirmektedir. Ayrıca, modelin karar mekanizmasını görselleştirmek için **Grad-CAM** yöntemi kullanılmıştır.
+Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneumonia)** hastalığını tespit edebilen bir yapay zekâ modelini içermektedir. **Convolutional Neural Network (CNN)** mimarisi kullanılarak oluşturulan model, görüntü sınıflandırması yaparak **hasta** ve **sağlıklı** ayrımını gerçekleştirmektedir.
 
 ### 🔧 Kullanılan Teknolojiler
 
@@ -16,14 +16,13 @@ Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneum
 - X-ray görüntülerinden zatürre tespiti
 - Eğitim / test veri ayrımı
 - Model eğitimi sonrası doğruluk ve kayıp grafiklerinin çizimi
-- Grad-CAM ile açıklanabilirlik desteği
 - Geliştirilmeye açık modüler yapı
 
 ---
 
 ## 🇬🇧 Project Description
 
-This project involves an AI model that detects **pneumonia** from chest X-ray images using a **Convolutional Neural Network (CNN)**. It classifies images as **pneumonic** or **healthy**, and provides visual explanations via **Grad-CAM**.
+This project involves an AI model that detects **pneumonia** from chest X-ray images using a **Convolutional Neural Network (CNN)**. It classifies images as **pneumonic** or **healthy** based on input X-ray scans.
 
 ### 🔧 Technologies Used
 
@@ -37,7 +36,6 @@ This project involves an AI model that detects **pneumonia** from chest X-ray im
 - Pneumonia detection from chest X-ray images
 - Train/test data split
 - Accuracy and loss plotting after training
-- Visual explainability using Grad-CAM
 - Modular and extensible code structure
 
 ---

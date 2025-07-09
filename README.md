@@ -2,7 +2,7 @@
 
 ## 🇹🇷 Proje Açıklaması
 
-Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneumonia)** hastalığını tespit edebilen bir yapay zekâ modelini içermektedir. Convolutional Neural Network (CNN) mimarisi kullanılarak oluşturulan model, görüntü sınıflandırması yaparak **hasta** ve **sağlıklı** ayrımını gerçekleştirmektedir. Ek olarak Grad-CAM ile açıklanabilirlik (explainability) sağlanmıştır.
+Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneumonia)** hastalığını tespit edebilen bir yapay zekâ modelini içermektedir. **Convolutional Neural Network (CNN)** mimarisi kullanılarak oluşturulan model, görüntü sınıflandırması yaparak **hasta** ve **sağlıklı** ayrımını gerçekleştirmektedir. Ayrıca, modelin karar mekanizmasını görselleştirmek için **Grad-CAM** yöntemi kullanılmıştır.
 
 ### 🔧 Kullanılan Teknolojiler
 
@@ -14,15 +14,16 @@ Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneum
 ### 🚀 Özellikler
 
 - X-ray görüntülerinden zatürre tespiti
-- Eğitim / test ayrımı
-- Eğitim sonrası doğruluk ve kayıp grafikleri
+- Eğitim / test veri ayrımı
+- Model eğitimi sonrası doğruluk ve kayıp grafiklerinin çizimi
+- Grad-CAM ile açıklanabilirlik desteği
 - Geliştirilmeye açık modüler yapı
 
 ---
 
 ## 🇬🇧 Project Description
 
-This project involves an AI model that can detect **pneumonia** from chest X-ray images. It uses a Convolutional Neural Network (CNN) architecture to classify images as **pneumonic** or **healthy**. Additionally, the project includes Grad-CAM-based visual explainability.
+This project involves an AI model that detects **pneumonia** from chest X-ray images using a **Convolutional Neural Network (CNN)**. It classifies images as **pneumonic** or **healthy**, and provides visual explanations via **Grad-CAM**.
 
 ### 🔧 Technologies Used
 
@@ -33,17 +34,18 @@ This project involves an AI model that can detect **pneumonia** from chest X-ray
 
 ### 🚀 Features
 
-- Pneumonia detection from X-ray images
-- Train/test split functionality
-- Accuracy/loss plotting after training
-- Modular design for further improvements
+- Pneumonia detection from chest X-ray images
+- Train/test data split
+- Accuracy and loss plotting after training
+- Visual explainability using Grad-CAM
+- Modular and extensible code structure
 
 ---
 
 ## 👨‍💻 Geliştiriciler / Developers
 
-- **Ahmethan Abacı** – [GitHub Profili](https://github.com/AhmethanAbaci)
-- **Yusuf Esen** – [(https://github.com/Yusufesen1521)]
+- [**Ahmethan Abacı**](https://github.com/AhmethanAbaci)
+- [**Yusuf Esen**](https://github.com/Yusufesen1521)
 
 ---
 

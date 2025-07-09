@@ -43,7 +43,7 @@ This project involves an AI model that can detect **pneumonia** from chest X-ray
 ## 👨‍💻 Geliştiriciler / Developers
 
 - **Ahmethan Abacı** – [GitHub Profili](https://github.com/AhmethanAbaci)
-- **Yusuf Esen** – 
+- **Yusuf Esen** – [(https://github.com/Yusufesen1521)]
 
 ---
 

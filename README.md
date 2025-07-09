@@ -1,49 +1,46 @@
-# 🫁 Zatürre Tespit Uygulaması | Pneumonia Detection System
+# 🫁 Zatürre Tespit Web Uygulaması | Pneumonia Detection Web App
 
 ## 🇹🇷 Proje Açıklaması
 
-Bu proje, göğüs röntgeni (X-ray) görüntüleri üzerinden **zatürre (pneumonia)** hastalığını tespit edebilen bir yapay zekâ modelini içermektedir. **Convolutional Neural Network (CNN)** mimarisi kullanılarak oluşturulan model, görüntü sınıflandırması yaparak **hasta** ve **sağlıklı** ayrımını gerçekleştirmektedir.
+Bu proje, göğüs röntgeni (X-ray) görüntülerinden **zatürre (pneumonia)** tespiti yapabilen bir web uygulamasıdır. Kullanıcı, web arayüzü üzerinden bir görsel yükler; sistem önce bu görselin bir **X-ray** olup olmadığını kontrol eder, ardından gerçek bir X-ray ise **zatürre tanısı** koyar.
+
+İki yapay zekâ modeli kullanılmıştır:
+
+- `xray_model`: Görüntünün X-ray olup olmadığını tahmin eder.
+- `disease_model`: X-ray görüntüsünde zatürre var mı yok mu karar verir.
 
 ### 🔧 Kullanılan Teknolojiler
 
 - Python
+- Flask
 - TensorFlow / Keras
-- OpenCV
-- Matplotlib
-
-### 🚀 Özellikler
-
-- X-ray görüntülerinden zatürre tespiti
-- Eğitim / test veri ayrımı
-- Model eğitimi sonrası doğruluk ve kayıp grafiklerinin çizimi
-- Geliştirilmeye açık modüler yapı
+- Pillow (PIL)
+- NumPy
+- HTML / CSS (Jinja2 ile)
 
 ---
 
 ## 🇬🇧 Project Description
 
-This project involves an AI model that detects **pneumonia** from chest X-ray images using a **Convolutional Neural Network (CNN)**. It classifies images as **pneumonic** or **healthy** based on input X-ray scans.
+This is a web-based application that detects **pneumonia** from chest X-ray images. The user uploads an image via a browser, and the system:
 
-### 🔧 Technologies Used
+1. Checks if the image is an **X-ray** using a deep learning model.
+2. If it is, performs **pneumonia classification** with another model.
 
-- Python
-- TensorFlow / Keras
-- OpenCV
-- Matplotlib
+Two AI models are used:
 
-### 🚀 Features
-
-- Pneumonia detection from chest X-ray images
-- Train/test data split
-- Accuracy and loss plotting after training
-- Modular and extensible code structure
+- `xray_model`: Classifies whether the image is a chest X-ray.
+- `disease_model`: Predicts whether the image shows signs of pneumonia.
 
 ---
 
-## 👨‍💻 Geliştiriciler / Developers
+## 🖥️ Uygulama Özellikleri / Features
 
-- [**Ahmethan Abacı**](https://github.com/AhmethanAbaci)
-- [**Yusuf Esen**](https://github.com/Yusufesen1521)
+- Web arayüzü üzerinden görsel yükleme
+- Görüntünün X-ray olup olmadığını doğrulama
+- X-ray görüntüsünde zatürre tespiti
+- Tahmin yüzdesi gösterimi
+- Önceki sonuçların geçmişte listelenmesi
 
 ---
 

@@ -43,6 +43,14 @@ Two AI models are used:
 - Önceki sonuçların geçmişte listelenmesi
 
 ---
+## 👨‍💻 Geliştiriciler | Developers
+
+| İsim / Name         | GitHub                             |
+|---------------------|----------------------------------|
+| Ahmethan Abacı      | [github.com/AhmethanAbaci](https://github.com/AhmethanAbaci) |
+| Yusuf Esen          | [github.com/Yusufesen1521](https://github.com/Yusufesen1521) |
+
+---
 
 ## 📁 Kurulum / Installation
 
